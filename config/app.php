@@ -288,6 +288,7 @@ return [
         'default' => [
             'className' => Connection::class,
             'driver' => Mysql::class,
+            'url' => env('DATABASE_URL'),
             'host' => env('MYSQLHOST'),
             'port' => env('MYSQLPORT'),
             'username' => env('MYSQLUSER'),
