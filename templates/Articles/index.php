@@ -24,6 +24,13 @@
     ) ?>
 </p>
 
-<hr>
+<p>
+    <?= $this->Form->postLink(
+        'Eliminar',
+        ['action' => 'delete', $article->id],
+        ['confirm' => '¿Seguro que deseas eliminar este artículo?']
+    ) ?>
+</p>
 
+<hr>
 <?php endforeach; ?>
