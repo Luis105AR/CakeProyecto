@@ -18,8 +18,8 @@
     ?>
     <?= $this->Form->control('tags._ids', [
     'label' => 'Etiquetas',
-    'multiple' => 'checkbox',
-    'options' => $tags
+    'options' => $tags,
+    'empty' => 'Selecciona una etiqueta'
 ]); ?>
 </fieldset>
 
