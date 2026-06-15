@@ -62,43 +62,16 @@ public function index()
 
         $data = $this->request->getData();
 
-        $article = $this->Articles->patchEntity($article, $data);
+        $article = $this->Articles->patchEntity(
+    $article,
+    $data,
+    ['associated' => ['Tags']]
+);
 
         $article->user_id = $user->id;
 
         if ($this->Articles->save($article)) {
 
-            if (!empty($data['tags'])) {
-
-                $tags = array_map('trim', explode(',', $data['tags']));
-
-                $tagsTable = $this->fetchTable('Tags');
-
-                foreach ($tags as $tagTitle) {
-
-                    $tag = $tagsTable->find()
-                        ->where(['title' => $tagTitle])
-                        ->first();
-
-                    if (!$tag) {
-                        $tag = $tagsTable->newEntity([
-                            'title' => $tagTitle
-                        ]);
-
-                        $tagsTable->save($tag);
-                    }
-
-                    $connection = $this->Articles->getConnection();
-
-                    $connection->insert(
-                        'articles_tags',
-                        [
-                            'article_id' => $article->id,
-                            'tag_id' => $tag->id
-                        ]
-                    );
-                }
-            }
 
             $this->Flash->success(__('The article has been saved.'));
 
@@ -107,8 +80,11 @@ public function index()
 
         $this->Flash->error(__('The article could not be saved. Please, try again.'));
     }
+    $tags = $this->fetchTable('Tags')
+    ->find('list', keyField: 'id', valueField: 'title')
+    ->all();
 
-    $this->set(compact('article'));
+$this->set(compact('article', 'tags'));
 }
     /**
      * Edit method

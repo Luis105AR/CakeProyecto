@@ -16,12 +16,11 @@
     <?=
         $this->Form->control('body', ['rows' => '5']);
     ?>
-    <?=
-    $this->Form->control('tags', [
-        'type' => 'text',
-        'label' => 'Etiquetas (separadas por comas)'
-    ]);
-?>
+    <?= $this->Form->control('tags._ids', [
+    'label' => 'Etiquetas',
+    'multiple' => 'checkbox',
+    'options' => $tags
+]); ?>
 </fieldset>
 
 <?= $this->Form->button(__('Guardar Artículo')) ?>
