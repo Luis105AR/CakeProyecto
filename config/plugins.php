@@ -29,6 +29,7 @@
   */
 return [
     // 'DebugKit' => ['onlyDebug' => true],
+    'Authentication' => [],
     'Bake' => ['onlyCli' => true, 'optional' => true],
     'Migrations' => ['onlyCli' => true],
 ];
