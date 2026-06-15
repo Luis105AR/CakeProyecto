@@ -5,43 +5,62 @@ $user = $this->request->getAttribute('identity');
 ?>
 
 <?php if ($user && $user->role === 'admin'): ?>
-<p>
-    <?= $this->Html->link('Agregar Artículo', ['action' => 'add']) ?>
-</p>
+<div style="text-align:right; margin-bottom:15px;">
+    <?= $this->Html->link(
+        'Nuevo Artículo',
+        ['action' => 'add'],
+        ['class' => 'button']
+    ) ?>
+</div>
 <?php endif; ?>
 
-<?php foreach ($articles as $article): ?>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Slug</th>
+            <th>Creado</th>
+            <th>Modificado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
 
-<h3>
-    <?= $this->Html->link(
-        $article->title,
-        ['action' => 'view', $article->slug]
-    ) ?>
-</h3>
+    <tbody>
+        <?php foreach ($articles as $article): ?>
+        <tr>
+            <td><?= $article->id ?></td>
+            <td><?= h($article->title) ?></td>
+            <td><?= h($article->slug) ?></td>
+            <td><?= $article->created ?></td>
+            <td><?= $article->modified ?></td>
 
-<p>
-    <?= h($article->body) ?>
-</p>
+            <td>
+                <?= $this->Html->link(
+                    'Ver',
+                    ['action' => 'view', $article->slug]
+                ) ?>
 
-<?php if ($user && $user->role === 'admin'): ?>
+                <?php if ($user && $user->role === 'admin'): ?>
 
-<p>
-    <?= $this->Html->link(
-        'Editar',
-        ['action' => 'edit', $article->id]
-    ) ?>
-</p>
+                    |
 
-<p>
-    <?= $this->Form->postLink(
-        'Eliminar',
-        ['action' => 'delete', $article->id],
-        ['confirm' => '¿Seguro que deseas eliminar este artículo?']
-    ) ?>
-</p>
+                    <?= $this->Html->link(
+                        'Editar',
+                        ['action' => 'edit', $article->id]
+                    ) ?>
 
-<?php endif; ?>
+                    |
 
-<hr>
+                    <?= $this->Form->postLink(
+                        'Eliminar',
+                        ['action' => 'delete', $article->id],
+                        ['confirm' => '¿Eliminar artículo?']
+                    ) ?>
 
-<?php endforeach; ?>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
