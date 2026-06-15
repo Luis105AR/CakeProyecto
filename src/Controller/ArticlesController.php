@@ -47,28 +47,69 @@ public function index()
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
-        $user = $this->request->getAttribute('identity');
+{
+    $user = $this->request->getAttribute('identity');
 
-if (!$user || $user->role !== 'admin') {
-    $this->Flash->error('No tienes permisos.');
+    if (!$user || $user->role !== 'admin') {
+        $this->Flash->error('No tienes permisos.');
 
-    return $this->redirect(['action' => 'index']);
-}
-        $article = $this->Articles->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $article = $this->Articles->patchEntity($article, $this->request->getData());
-            $article->user_id = $user->id;
-            if ($this->Articles->save($article)) {
-                $this->Flash->success(__('The article has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The article could not be saved. Please, try again.'));
-        }
-        $this->set(compact('article'));
+        return $this->redirect(['action' => 'index']);
     }
 
+    $article = $this->Articles->newEmptyEntity();
+
+    if ($this->request->is('post')) {
+
+        $data = $this->request->getData();
+
+        $article = $this->Articles->patchEntity($article, $data);
+
+        $article->user_id = $user->id;
+
+        if ($this->Articles->save($article)) {
+
+            if (!empty($data['tags'])) {
+
+                $tags = array_map('trim', explode(',', $data['tags']));
+
+                $tagsTable = $this->fetchTable('Tags');
+
+                foreach ($tags as $tagTitle) {
+
+                    $tag = $tagsTable->find()
+                        ->where(['title' => $tagTitle])
+                        ->first();
+
+                    if (!$tag) {
+                        $tag = $tagsTable->newEntity([
+                            'title' => $tagTitle
+                        ]);
+
+                        $tagsTable->save($tag);
+                    }
+
+                    $connection = $this->Articles->getConnection();
+
+                    $connection->insert(
+                        'articles_tags',
+                        [
+                            'article_id' => $article->id,
+                            'tag_id' => $tag->id
+                        ]
+                    );
+                }
+            }
+
+            $this->Flash->success(__('The article has been saved.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->Flash->error(__('The article could not be saved. Please, try again.'));
+    }
+
+    $this->set(compact('article'));
+}
     /**
      * Edit method
      *

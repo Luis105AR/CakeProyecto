@@ -46,6 +46,7 @@ class ArticlesTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->belongsTo('Users');
+        $this->belongsToMany('Tags');
     }
 
     /**
