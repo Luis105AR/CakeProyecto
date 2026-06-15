@@ -17,7 +17,10 @@ class ArticlesController extends AppController
      */
 public function index()
 {
-    $articles = $this->Articles->find()->all();
+    $articles = $this->Articles
+        ->find()
+        ->contain(['Users'])
+        ->all();
 
     $this->set(compact('articles'));
 }
@@ -55,6 +58,7 @@ if (!$user || $user->role !== 'admin') {
         $article = $this->Articles->newEmptyEntity();
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
+            $article->user_id = $user->id;
             if ($this->Articles->save($article)) {
                 $this->Flash->success(__('The article has been saved.'));
 

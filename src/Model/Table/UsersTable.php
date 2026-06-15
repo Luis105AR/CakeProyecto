@@ -9,15 +9,17 @@ use Cake\Validation\Validator;
 class UsersTable extends Table
 {
     public function initialize(array $config): void
-    {
-        parent::initialize($config);
+{
+    parent::initialize($config);
 
-        $this->setTable('users');
-        $this->setDisplayField('username');
-        $this->setPrimaryKey('id');
+    $this->setTable('users');
+    $this->setDisplayField('username');
+    $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
-    }
+    $this->addBehavior('Timestamp');
+
+    $this->hasMany('Articles');
+}
 
     public function validationDefault(Validator $validator): Validator
     {

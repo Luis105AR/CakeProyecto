@@ -42,8 +42,10 @@ class ArticlesTable extends Table
         $this->setTable('articles');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
+        
 
         $this->addBehavior('Timestamp');
+        $this->belongsTo('Users');
     }
 
     /**
