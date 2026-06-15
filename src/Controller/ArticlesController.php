@@ -45,6 +45,13 @@ public function index()
      */
     public function add()
     {
+        $user = $this->request->getAttribute('identity');
+
+if (!$user || $user->role !== 'admin') {
+    $this->Flash->error('No tienes permisos.');
+
+    return $this->redirect(['action' => 'index']);
+}
         $article = $this->Articles->newEmptyEntity();
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
@@ -67,6 +74,13 @@ public function index()
      */
     public function edit($id = null)
     {
+        $user = $this->request->getAttribute('identity');
+
+if (!$user || $user->role !== 'admin') {
+    $this->Flash->error('No tienes permisos.');
+
+    return $this->redirect(['action' => 'index']);
+}
         $article = $this->Articles->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
@@ -89,6 +103,13 @@ public function index()
      */
     public function delete($id = null)
     {
+        $user = $this->request->getAttribute('identity');
+
+if (!$user || $user->role !== 'admin') {
+    $this->Flash->error('No tienes permisos.');
+
+    return $this->redirect(['action' => 'index']);
+}
         $this->request->allowMethod(['post', 'delete']);
         $article = $this->Articles->get($id);
         if ($this->Articles->delete($article)) {

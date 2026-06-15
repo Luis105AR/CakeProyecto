@@ -1,8 +1,14 @@
 <h1>Artículos</h1>
 
+<?php
+$user = $this->request->getAttribute('identity');
+?>
+
+<?php if ($user && $user->role === 'admin'): ?>
 <p>
     <?= $this->Html->link('Agregar Artículo', ['action' => 'add']) ?>
 </p>
+<?php endif; ?>
 
 <?php foreach ($articles as $article): ?>
 
@@ -16,6 +22,8 @@
 <p>
     <?= h($article->body) ?>
 </p>
+
+<?php if ($user && $user->role === 'admin'): ?>
 
 <p>
     <?= $this->Html->link(
@@ -32,5 +40,8 @@
     ) ?>
 </p>
 
+<?php endif; ?>
+
 <hr>
+
 <?php endforeach; ?>

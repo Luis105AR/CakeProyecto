@@ -42,10 +42,19 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/">Documentation</a>
     <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
 
-    <?= $this->Html->link(
-        'Cerrar sesión',
-        ['controller' => 'Users', 'action' => 'logout']
-    ) ?>
+    <?php if ($this->request->getAttribute('identity')): ?>
+        <?php $user = $this->request->getAttribute('identity'); ?>
+
+        <span>
+            <?= h($user->username) ?>
+            (<?= h($user->role) ?>)
+        </span>
+
+        <?= $this->Html->link(
+            'Cerrar sesión',
+            ['controller' => 'Users', 'action' => 'logout']
+        ) ?>
+    <?php endif; ?>
 </div>
     </nav>
     <main class="main">
