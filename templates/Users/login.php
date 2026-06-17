@@ -15,3 +15,10 @@
 <?= $this->Form->button('Entrar') ?>
 
 <?= $this->Form->end() ?>
+
+<p style="margin-top:20px;">
+    <?= $this->Html->link(
+        'Agregar usuario',
+        ['controller' => 'Users', 'action' => 'add']
+    ) ?>
+</p>
